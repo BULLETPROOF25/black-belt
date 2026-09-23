@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MMA Academy</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#0b1020;
+    color:white;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:12px 18px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{opacity:.85}
+
+.hidden{display:none!important}
+
+#loginScreen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.loginBox{
+    width:420px;
+    max-width:100%;
+    background:#151d35;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 30px #0008;
+}
+
+.loginBox h1{
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    margin:7px 0;
+    border-radius:9px;
+    border:1px solid #39466b;
+    background:#0d1428;
+    color:white;
+}
+
+.loginBtn{
+    width:100%;
+    margin-top:10px;
+    background:#4f7cff;
+    color:white;
+}
+
+.createBtn{
+    width:100%;
+    margin-top:8px;
+    background:#21c47b;
+    color:white;
+}
+
+.message{
+    min-height:22px;
+    color:#ffcc66;
+}
+
+.small{
+    color:#aab4d0;
+    font-size:13px;
+}
+
+header{
+    background:#11182d;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+header h2{margin:0}
+
+nav button{
+    margin:3px;
+    background:#263454;
+    color:white;
+}
+
+main{
+    max-width:1100px;
+    margin:auto;
+    padding:25px;
+}
+
+.hero{
+    background:linear-gradient(135deg,#18264d,#241943);
+    padding:35px;
+    border-radius:20px;
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:40px;
+    margin-top:0;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:#151d35;
+    border-radius:17px;
+    padding:22px;
+    box-shadow:0 8px 20px #0005;
+}
+
+.card h3{margin-top:0}
+
+.courseBtn{
+    width:100%;
+    background:#4f7cff;
+    color:white;
+}
+
+.lesson{
+    background:#151d35;
+    margin:15px 0;
+    padding:20px;
+    border-radius:15px;
+}
+
+.lesson.locked{
+    opacity:.45;
+}
+
+.lesson.complete{
+    border-left:5px solid #21c47b;
+}
+
+.lessonTitle{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.lesson button{
+    margin-top:10px;
+    margin-right:5px;
+}
+
+.videoBtn{
+    background:#e53935;
+    color:white;
+}
+
+.completeBtn{
+    background:#21c47b;
+    color:white;
+}
+
+.disabledBtn{
+    background:#555;
+    color:#aaa;
+    cursor:not-allowed;
+}
+
+.progressBox{
+    background:#202b49;
+    border-radius:20px;
+    overflow:hidden;
+    height:25px;
+    margin:10px 0;
+}
+
+.progressBar{
+    height:100%;
+    background:#21c47b;
+    transition:.3s;
+}
+
+.belt{
+    display:inline-block;
+    width:150px;
+    height:45px;
+    border-radius:7px;
+    margin:7px;
+    text-align:center;
+    line-height:45px;
+    font-weight:bold;
+    color:#111;
+    border:3px solid #fff3;
+}
+
+.white{background:white}
+.yellow{background:#ffe44d}
+.orange{background:#ff982e}
+.green{background:#38c96b}
+.blue{background:#3985ff;color:white}
+.purple{background:#9b55d8;color:white}
+.brown{background:#8b4e27;color:white}
+.red{background:#e83c3c;color:white}
+.black{background:#111;color:white}
+
+.pageTitle{
+    font-size:32px;
+    margin-bottom:20px;
+}
+
+.warning{
+    background:#3a241d;
+    border:1px solid #a75c3d;
+    padding:15px;
+    border-radius:12px;
+    margin:15px 0;
+}
+
+.adminTable{
+    width:100%;
+    border-collapse:collapse;
+    background:#151d35;
+}
+
+.adminTable th,
+.adminTable td{
+    padding:12px;
+    border-bottom:1px solid #303b5b;
+    text-align:left;
+}
+
+.adminTable th{
+    background:#202b49;
+}
+
+.dangerBtn{
+    background:#d33;
+    color:white;
+}
+
+@media(max-width:600px){
+    .hero h1{font-size:30px}
+    header{flex-direction:column}
+    .adminTable{
+        font-size:12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN SCREEN
+===================================================== -->
+
+<div id="loginScreen">
+
+    <div class="loginBox">
+
+        <h1>?? MMA Academy</h1>
+
+        <p class="small">
+            Karate • Kung Fu • Taekwondo • Math • Chess
+        </p>
+
+        <input
+            id="username"
+            type="text"
+            placeholder="Username"
+            autocomplete="username"
+        >
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+        >
+
+        <button
+            class="loginBtn"
+            onclick="login()">
+            LOGIN
+        </button>
+
+        <button
+            class="createBtn"
+            onclick="createAccount()">
+            CREATE ACCOUNT
+        </button>
+
+        <p id="loginMessage" class="message"></p>
+
+        <p class="small">
+            New users should choose CREATE ACCOUNT first.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN APP
+===================================================== -->
+
+<div id="app" class="hidden">
+
+<header>
+
+    <h2>?? MMA Academy</h2>
+
+    <nav>
+
+        <button onclick="home()">Home</button>
+
+        <button onclick="showProgress()">
+            Progress
+        </button>
+
+        <button
+            id="adminButton"
+            class="hidden"
+            onclick="showAdmin()">
+            ?? Admin
+        </button>
+
+        <button onclick="logout()">
+            Logout
+        </button>
+
+    </nav>
+
+</header>
+
+<main id="content"></main>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+const USERS_KEY = "MMA_ACADEMY_USERS_FIXED";
+const CURRENT_USER_KEY = "MMA_ACADEMY_CURRENT_FIXED";
+const ADMIN_KEY = "MMA_ACADEMY_ADMIN_FIXED";
+
+
+/* =====================================================
+   SIMPLE LOCAL PASSWORD HASH
+
+   This avoids the previous login problem with
+   crypto.subtle when opening an HTML file directly.
+
+   NOTE:
+   This is for a local learning app, NOT a production
+   authentication server.
+===================================================== */
+
+function hashPassword(password){
+
+    let hash = 2166136261;
+
+    for(let i=0;i<password.length;i++){
+
+        hash ^= password.charCodeAt(i);
+
+        hash +=
+            (hash << 1) +
+            (hash << 4) +
+            (hash << 7) +
+            (hash << 8) +
+            (hash << 24);
+
+    }
+
+    return (
+        hash >>> 0
+    ).toString(16);
+}
+
+
+/* =====================================================
+   STORAGE HELPERS
+===================================================== */
+
+function getUsers(){
+
+    try{
+        return JSON.parse(
+            localStorage.getItem(USERS_KEY) || "{}"
+        );
+    }catch{
+        return {};
+    }
+}
+
+function saveUsers(users){
+
+    localStorage.setItem(
+        USERS_KEY,
+        JSON.stringify(users)
+    );
+}
+
+function getCurrentUser(){
+
+    return localStorage.getItem(
+        CURRENT_USER_KEY
+    );
+}
+
+function getProgress(username){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                "MMA_PROGRESS_" + username
+            ) || "{}"
+        );
+
+    }catch{
+
+        return {};
+
+    }
+}
+
+function saveProgress(username,progress){
+
+    localStorage.setItem(
+        "MMA_PROGRESS_" + username,
+        JSON.stringify(progress)
+    );
+}
+
+
+/* =====================================================
+   ADMIN ACCOUNT
+
+   Creator username:
+   admin
+
+   Creator password:
+   change-this-admin-password
+===================================================== */
+
+function setupAdmin(){
+
+    let admin;
+
+    try{
+
+        admin=JSON.parse(
+            localStorage.getItem(ADMIN_KEY)
+        );
+
+    }catch{
+
+        admin=null;
+
+    }
+
+    if(!admin){
+
+        admin={
+            username:"admin",
+
+            passwordHash:
+                hashPassword(
+                    "change-this-admin-password"
+                )
+        };
+
+        localStorage.setItem(
+            ADMIN_KEY,
+            JSON.stringify(admin)
+        );
+    }
+}
+
+function isAdmin(){
+
+    const current=getCurrentUser();
+
+    let admin;
+
+    try{
+
+        admin=JSON.parse(
+            localStorage.getItem(ADMIN_KEY)
+        );
+
+    }catch{
+
+        return false;
+
+    }
+
+    return(
+        admin &&
+        current===admin.username
+    );
+}
+
+
+/* =====================================================
+   COURSES
+===================================================== */
+
+const courses={
+
+    karate:{
+        name:"?? Karate",
+        description:"Karate beginner to advanced learning.",
+        levels:[
+
+            {
+                name:"White Belt",
+                belt:"white",
+                lessons:[
+
+                    {
+                        title:"Karate Basics",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Basic Movement",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"White Belt Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Yellow Belt",
+                belt:"yellow",
+                lessons:[
+
+                    {
+                        title:"Yellow Belt Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Movement Practice",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Yellow Belt Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Orange Belt",
+                belt:"orange",
+                lessons:[
+
+                    {
+                        title:"Orange Belt Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Balance Practice",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Orange Belt Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Green Belt",
+                belt:"green",
+                lessons:[
+
+                    {
+                        title:"Green Belt Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Form Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Green Belt Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Blue Belt",
+                belt:"blue",
+                lessons:[
+
+                    {
+                        title:"Blue Belt Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Movement Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Blue Belt Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Purple Belt",
+                belt:"purple",
+                lessons:[
+
+                    {
+                        title:"Purple Belt Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Form Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Purple Belt Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Brown Belt",
+                belt:"brown",
+                lessons:[
+
+                    {
+                        title:"Brown Belt Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Advanced Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Brown Belt Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Black Belt",
+                belt:"black",
+                lessons:[
+
+                    {
+                        title:"Black Belt Study",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Advanced Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    },
+
+                    {
+                        title:"Final Review",
+                        video:"https://www.youtube.com/watch?v=nNEaJKbF35o"
+                    }
+
+                ]
+            }
+
+        ]
+    },
+
+
+    kungfu:{
+        name:"?? Kung Fu",
+        description:"Progressive Kung Fu learning.",
+        levels:[
+
+            {
+                name:"Level 1",
+                belt:"white",
+                lessons:[
+
+                    {
+                        title:"Beginner Kung Fu Basics",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Basic Stances",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 1 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Level 2",
+                belt:"yellow",
+                lessons:[
+
+                    {
+                        title:"Movement Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Balance Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 2 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Level 3",
+                belt:"orange",
+                lessons:[
+
+                    {
+                        title:"Technique Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Form Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 3 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Level 4",
+                belt:"green",
+                lessons:[
+
+                    {
+                        title:"Intermediate Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Movement Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 4 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Level 5",
+                belt:"blue",
+                lessons:[
+
+                    {
+                        title:"Advanced Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Form Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 5 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Level 6",
+                belt:"purple",
+                lessons:[
+
+                    {
+                        title:"Advanced Movement",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Precision Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 6 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Level 7",
+                belt:"brown",
+                lessons:[
+
+                    {
+                        title:"Advanced Form",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Practice Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 7 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Level 8",
+                belt:"black",
+                lessons:[
+
+                    {
+                        title:"Advanced Study",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Final Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    },
+
+                    {
+                        title:"Level 8 Review",
+                        video:"https://www.youtube.com/watch?v=BUejYq2hRMg"
+                    }
+
+                ]
+            }
+
+        ]
+    },
+
+
+    taekwondo:{
+        name:"?? Taekwondo",
+        description:"Taekwondo progressive learning path.",
+        levels:[
+
+            {
+                name:"White Belt",
+                belt:"white",
+                lessons:[
+
+                    {
+                        title:"Taekwondo Introduction",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+beginner+basics"
+                    },
+
+                    {
+                        title:"Basic Movement",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+beginner+basics"
+                    },
+
+                    {
+                        title:"White Belt Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+beginner+basics"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Yellow Belt",
+                belt:"yellow",
+                lessons:[
+
+                    {
+                        title:"Yellow Belt Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+yellow+belt+basics"
+                    },
+
+                    {
+                        title:"Technique Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+yellow+belt+basics"
+                    },
+
+                    {
+                        title:"Yellow Belt Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+yellow+belt+basics"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Green Belt",
+                belt:"green",
+                lessons:[
+
+                    {
+                        title:"Green Belt Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+green+belt+basics"
+                    },
+
+                    {
+                        title:"Form Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+green+belt+basics"
+                    },
+
+                    {
+                        title:"Green Belt Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+green+belt+basics"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Blue Belt",
+                belt:"blue",
+                lessons:[
+
+                    {
+                        title:"Blue Belt Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+blue+belt+basics"
+                    },
+
+                    {
+                        title:"Movement Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+blue+belt+basics"
+                    },
+
+                    {
+                        title:"Blue Belt Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+blue+belt+basics"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Red Belt",
+                belt:"red",
+                lessons:[
+
+                    {
+                        title:"Red Belt Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+red+belt+basics"
+                    },
+
+                    {
+                        title:"Advanced Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+red+belt+basics"
+                    },
+
+                    {
+                        title:"Red Belt Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+red+belt+basics"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Black Belt",
+                belt:"black",
+                lessons:[
+
+                    {
+                        title:"Black Belt Study",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+black+belt+training"
+                    },
+
+                    {
+                        title:"Advanced Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+black+belt+training"
+                    },
+
+                    {
+                        title:"Final Review",
+                        video:"https://www.youtube.com/results?search_query=taekwondo+black+belt+training"
+                    }
+
+                ]
+            }
+
+        ]
+    },
+
+
+    math:{
+        name:"? Math",
+        description:"Math from beginner concepts to advanced study.",
+        levels:[
+
+            {
+                name:"Beginner Math",
+                belt:"white",
+                lessons:[
+
+                    {
+                        title:"Fractions",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+fractions"
+                    },
+
+                    {
+                        title:"Place Value",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+place+value"
+                    },
+
+                    {
+                        title:"Beginner Math Review",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+math+beginner"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Intermediate Math",
+                belt:"yellow",
+                lessons:[
+
+                    {
+                        title:"Decimals",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+decimals"
+                    },
+
+                    {
+                        title:"Percentages",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+percentages"
+                    },
+
+                    {
+                        title:"Intermediate Review",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+math"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Advanced Math",
+                belt:"black",
+                lessons:[
+
+                    {
+                        title:"Algebra Basics",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+algebra+basics"
+                    },
+
+                    {
+                        title:"Problem Solving",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+problem+solving"
+                    },
+
+                    {
+                        title:"Advanced Review",
+                        video:"https://www.youtube.com/results?search_query=Khan+Academy+algebra"
+                    }
+
+                ]
+            }
+
+        ]
+    },
+
+
+    chess:{
+        name:"?? Chess",
+        description:"Chess from beginner to advanced strategy.",
+        levels:[
+
+            {
+                name:"Chess Beginner",
+                belt:"white",
+                lessons:[
+
+                    {
+                        title:"Chess Board and Pieces",
+                        video:"https://www.youtube.com/watch?v=GQvR_fLkNKo"
+                    },
+
+                    {
+                        title:"How the Pieces Move",
+                        video:"https://www.youtube.com/watch?v=GQvR_fLkNKo"
+                    },
+
+                    {
+                        title:"Beginner Chess Review",
+                        video:"https://www.youtube.com/watch?v=GQvR_fLkNKo"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Chess Intermediate",
+                belt:"blue",
+                lessons:[
+
+                    {
+                        title:"Chess Tactics",
+                        video:"https://www.youtube.com/results?search_query=chess+beginner+tactics"
+                    },
+
+                    {
+                        title:"Planning Moves",
+                        video:"https://www.youtube.com/results?search_query=chess+strategy+beginners"
+                    },
+
+                    {
+                        title:"Intermediate Review",
+                        video:"https://www.youtube.com/results?search_query=chess+intermediate+lesson"
+                    }
+
+                ]
+            },
+
+            {
+                name:"Chess Advanced",
+                belt:"black",
+                lessons:[
+
+                    {
+                        title:"Advanced Strategy",
+                        video:"https://www.youtube.com/results?search_query=chess+advanced+strategy"
+                    },
+
+                    {
+                        title:"Game Analysis",
+                        video:"https://www.youtube.com/results?search_query=chess+game+analysis+lesson"
+                    },
+
+                    {
+                        title:"Advanced Review",
+                        video:"https://www.youtube.com/results?search_query=advanced+chess+lesson"
+                    }
+
+                ]
+            }
+
+        ]
+    }
+
+};
+
+
+/* =====================================================
+   ACCOUNT CREATION
+===================================================== */
+
+function createAccount(){
+
+    const username=
+        document.getElementById("username")
+        .value
+        .trim();
+
+    const password=
+        document.getElementById("password")
+        .value;
+
+    if(username.length<3){
+
+        showMessage(
+            "Username must be at least 3 characters."
+        );
+
+        return;
+    }
+
+    if(username.toLowerCase()==="admin"){
+
+        showMessage(
+            "That username is reserved for the creator."
+        );
+
+        return;
+    }
+
+    if(password.length<8){
+
+        showMessage(
+            "Password must be at least 8 characters."
+        );
+
+        return;
+    }
+
+    const users=getUsers();
+
+    if(users[username]){
+
+        showMessage(
+            "That username is already taken. Choose another."
+        );
+
+        return;
+    }
+
+    users[username]={
+
+        passwordHash:hashPassword(password),
+
+        createdAt:new Date().toISOString()
+
+    };
+
+    saveUsers(users);
+
+    localStorage.setItem(
+        CURRENT_USER_KEY,
+        username
+    );
+
+    showMessage("");
+
+    startApp();
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function login(){
+
+    const username=
+        document.getElementById("username")
+        .value
+        .trim();
+
+    const password=
+        document.getElementById("password")
+        .value;
+
+    if(!username || !password){
+
+        showMessage(
+            "Enter your username and password."
+        );
+
+        return;
+    }
+
+
+    /* Creator login */
+
+    let admin;
+
+    try{
+
+        admin=JSON.parse(
+            localStorage.getItem(ADMIN_KEY)
+        );
+
+    }catch{
+
+        admin=null;
+
+    }
+
+
+    if(
+        admin &&
+        username===admin.username &&
+        hashPassword(password)===admin.passwordHash
+    ){
+
+        localStorage.setItem(
+            CURRENT_USER_KEY,
+            username
+        );
+
+        startApp();
+
+        return;
+    }
+
+
+    /* Normal user login */
+
+    const users=getUsers();
+
+    if(!users[username]){
+
+        showMessage(
+            "Username or password is incorrect."
+        );
+
+        return;
+    }
+
+    if(
+        hashPassword(password)!==
+        users[username].passwordHash
+    ){
+
+        showMessage(
+            "Username or password is incorrect."
+        );
+
+        return;
+    }
+
+
+    localStorage.setItem(
+        CURRENT_USER_KEY,
+        username
+    );
+
+    startApp();
+}
+
+
+/* =====================================================
+   START APP
+===================================================== */
+
+function startApp(){
+
+    document
+        .getElementById("loginScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("adminButton")
+        .classList.toggle(
+            "hidden",
+            !isAdmin()
+        );
+
+    home();
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        CURRENT_USER_KEY
+    );
+
+    document
+        .getElementById("app")
+        .classList.add("hidden");
+
+    document
+        .getElementById("loginScreen")
+        .classList.remove("hidden");
+
+    document.getElementById("username").value="";
+    document.getElementById("password").value="";
+
+    showMessage("");
+}
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+function home(){
+
+    let html=`
+
+        <section class="hero">
+
+            <h1>
+                Welcome to MMA Academy ??
+            </h1>
+
+            <p>
+                Learn, complete lessons,
+                unlock levels and track your progress.
+            </p>
+
+            <div class="warning">
+
+                For martial arts, practice safely
+                with appropriate space and qualified
+                adult/instructor supervision.
+
+            </div>
+
+        </section>
+
+        <h2>Choose Your Academy</h2>
+
+        <div class="grid">
+    `;
+
+
+    for(const key in courses){
+
+        const course=courses[key];
+
+        html+=`
+
+            <div class="card">
+
+                <h3>
+                    ${course.name}
+                </h3>
+
+                <p>
+                    ${course.description}
+                </p>
+
+                <button
+                    class="courseBtn"
+                    onclick="showCourse('${key}')">
+
+                    Open Academy
+
+                </button>
+
+            </div>
+
+        `;
+    }
+
+
+    html+=`</div>`;
+
+    document.getElementById("content")
+        .innerHTML=html;
+}
+
+
+/* =====================================================
+   COURSE PAGE
+===================================================== */
+
+function showCourse(courseKey){
+
+    const course=courses[courseKey];
+
+    const progress=
+        getProgress(getCurrentUser());
+
+    let html=`
+
+        <button onclick="home()">
+            ? Back
+        </button>
+
+        <h1 class="pageTitle">
+            ${course.name}
+        </h1>
+
+        <p>
+            ${course.description}
+        </p>
+
+    `;
+
+
+    course.levels.forEach(
+        (level,levelIndex)=>{
+
+            const unlocked=
+                levelIndex===0 ||
+                previousLevelComplete(
+                    courseKey,
+                    levelIndex,
+                    progress
+                );
+
+
+            html+=`
+
+                <div
+                    class="card"
+                    style="margin-top:25px"
+                >
+
+                    <h2>
+
+                        ${unlocked ? "??" : "??"}
+
+                        ${level.name}
+
+                    </h2>
+
+                    <div
+                        class="belt ${level.belt}">
+                        ${level.name}
+                    </div>
+
+            `;
+
+
+            level.lessons.forEach(
+                (lesson,lessonIndex)=>{
+
+                    const id=
+                        lessonId(
+                            courseKey,
+                            levelIndex,
+                            lessonIndex
+                        );
+
+                    const completed=
+                        progress[id]===true;
+
+
+                    html+=`
+
+                        <div
+                            class="lesson
+                            ${!unlocked ? "locked":""}
+                            ${completed ? "complete":""}"
+                        >
+
+                            <div class="lessonTitle">
+
+                                ${
+                                    completed
+                                    ? "? "
+                                    : ""
+                                }
+
+                                ${lesson.title}
+
+                            </div>
+
+
+                            <p>
+
+                                ${
+                                    completed
+                                    ? "Lesson completed."
+                                    : unlocked
+                                    ? "Watch the assigned lesson, then complete it."
+                                    : "Complete the previous level first."
+                                }
+
+                            </p>
+
+
+                            <button
+                                class="${
+                                    unlocked
+                                    ? "videoBtn"
+                                    : "disabledBtn"
+                                }"
+
+                                ${
+                                    unlocked
+                                    ? `onclick="openVideo('${lesson.video}')"`
+                                    : "disabled"
+                                }
+                            >
+
+                                ?? Watch Assigned Video
+
+                            </button>
+
+
+                            <button
+                                class="${
+                                    unlocked && !completed
+                                    ? "completeBtn"
+                                    : "disabledBtn"
+                                }"
+
+                                ${
+                                    unlocked && !completed
+                                    ? `onclick="completeLesson('${courseKey}',${levelIndex},${lessonIndex})"`
+                                    : "disabled"
+                                }
+                            >
+
+                                ${
+                                    completed
+                                    ? "Completed ?"
+                                    : "Complete Lesson"
+                                }
+
+                            </button>
+
+                        </div>
+
+                    `;
+                }
+            );
+
+
+            html+=`</div>`;
+        }
+    );
+
+
+    document.getElementById("content")
+        .innerHTML=html;
+}
+
+
+/* =====================================================
+   LEVEL SYSTEM
+===================================================== */
+
+function lessonId(
+    course,
+    level,
+    lesson
+){
+
+    return course+"_"+level+"_"+lesson;
+}
+
+
+function previousLevelComplete(
+    courseKey,
+    levelIndex,
+    progress
+){
+
+    if(levelIndex===0){
+        return true;
+    }
+
+    const previousLevel=
+        courses[courseKey]
+        .levels[levelIndex-1];
+
+
+    return previousLevel.lessons.every(
+        (_,lessonIndex)=>{
+
+            return progress[
+                lessonId(
+                    courseKey,
+                    levelIndex-1,
+                    lessonIndex
+                )
+            ]===true;
+
+        }
+    );
+}
+
+
+/* =====================================================
+   COMPLETE LESSON
+===================================================== */
+
+function completeLesson(
+    courseKey,
+    levelIndex,
+    lessonIndex
+){
+
+    const username=
+        getCurrentUser();
+
+    const progress=
+        getProgress(username);
+
+
+    progress[
+        lessonId(
+            courseKey,
+            levelIndex,
+            lessonIndex
+        )
+    ]=true;
+
+
+    saveProgress(
+        username,
+        progress
+    );
+
+
+    showCourse(courseKey);
+}
+
+
+/* =====================================================
+   VIDEO
+===================================================== */
+
+function openVideo(url){
+
+    window.open(
+        url,
+        "_blank"
+    );
+}
+
+
+/* =====================================================
+   PROGRESS PAGE
+===================================================== */
+
+function showProgress(){
+
+    const username=
+        getCurrentUser();
+
+    const progress=
+        getProgress(username);
+
+    let total=0;
+    let completed=0;
+
+
+    for(const key in courses){
+
+        courses[key].levels.forEach(
+            (level,levelIndex)=>{
+
+                level.lessons.forEach(
+                    (_,lessonIndex)=>{
+
+                        total++;
+
+                        if(
+                            progress[
+                                lessonId(
+                                    key,
+                                    levelIndex,
+                                    lessonIndex
+                                )
+                            ]
+                        ){
+
+                            completed++;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+    }
+
+
+    const percentage=
+        total===0
+        ? 0
+        : Math.round(
+            completed/total*100
+        );
+
+
+    let html=`
+
+        <h1 class="pageTitle">
+            ?? My Progress
+        </h1>
+
+        <div class="card">
+
+            <h2>
+                Overall Progress:
+                ${percentage}%
+            </h2>
+
+            <div class="progressBox">
+
+                <div
+                    class="progressBar"
+                    style="width:${percentage}%">
+                </div>
+
+            </div>
+
+            <p>
+                ${completed}
+                of
+                ${total}
+                lessons completed.
+            </p>
+
+        </div>
+
+        <div
+            class="grid"
+            style="margin-top:20px">
+
+    `;
+
+
+    for(const key in courses){
+
+        let courseTotal=0;
+        let courseCompleted=0;
+
+
+        courses[key].levels.forEach(
+            (level,levelIndex)=>{
+
+                level.lessons.forEach(
+                    (_,lessonIndex)=>{
+
+                        courseTotal++;
+
+                        if(
+                            progress[
+                                lessonId(
+                                    key,
+                                    levelIndex,
+                                    lessonIndex
+                                )
+                            ]
+                        ){
+
+                            courseCompleted++;
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        const p=
+            Math.round(
+                courseCompleted/courseTotal*100
+            );
+
+
+        html+=`
+
+            <div class="card">
+
+                <h3>
+                    ${courses[key].name}
+                </h3>
+
+                <div class="progressBox">
+
+                    <div
+                        class="progressBar"
+                        style="width:${p}%">
+                    </div>
+
+                </div>
+
+                <p>
+                    ${p}% complete
+                </p>
+
+            </div>
+
+        `;
+    }
+
+
+    html+=`</div>`;
+
+    document.getElementById("content")
+        .innerHTML=html;
+}
+
+
+/* =====================================================
+   ADMIN DASHBOARD
+===================================================== */
+
+function showAdmin(){
+
+    if(!isAdmin()){
+
+        alert(
+            "Creator access required."
+        );
+
+        return;
+    }
+
+
+    const users=getUsers();
+
+    let rows="";
+
+
+    for(const username in users){
+
+        const progress=
+            getProgress(username);
+
+        let total=0;
+        let completed=0;
+
+
+        for(const key in courses){
+
+            courses[key].levels.forEach(
+                (level,levelIndex)=>{
+
+                    level.lessons.forEach(
+                        (_,lessonIndex)=>{
+
+                            total++;
+
+                            if(
+                                progress[
+                                    lessonId(
+                                        key,
+                                        levelIndex,
+                                        lessonIndex
+                                    )
+                                ]
+                            ){
+
+                                completed++;
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+        }
+
+
+        const percentage=
+            total===0
+            ? 0
+            : Math.round(
+                completed/total*100
+            );
+
+
+        const created=
+            new Date(
+                users[username].createdAt
+            ).toLocaleString();
+
+
+        rows+=`
+
+            <tr>
+
+                <td>
+                    ${escapeHTML(username)}
+                </td>
+
+                <td>
+                    ${created}
+                </td>
+
+                <td>
+                    ${completed}/${total}
+                </td>
+
+                <td>
+                    ${percentage}%
+                </td>
+
+            </tr>
+
+        `;
+    }
+
+
+    document.getElementById("content")
+        .innerHTML=`
+
+        <h1 class="pageTitle">
+            ?? Creator Dashboard
+        </h1>
+
+        <div class="warning">
+
+            <strong>
+                Account security:
+            </strong>
+
+            Passwords are never shown.
+            The dashboard shows usernames,
+            account dates and learning progress.
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Student Accounts
+            </h2>
+
+            ${
+                Object.keys(users).length===0
+
+                ? "<p>No student accounts yet.</p>"
+
+                : `
+
+                    <div style="overflow-x:auto">
+
+                        <table class="adminTable">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Username
+                                    </th>
+
+                                    <th>
+                                        Created
+                                    </th>
+
+                                    <th>
+                                        Lessons
+                                    </th>
+
+                                    <th>
+                                        Progress
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                ${rows}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                `
+            }
+
+        </div>
+
+
+        <div
+            class="card"
+            style="margin-top:20px">
+
+            <h2>
+                Creator Information
+            </h2>
+
+            <p>
+                You are logged in as the creator.
+            </p>
+
+            <p>
+                User passwords are deliberately
+                not displayed.
+            </p>
+
+        </div>
+
+    `;
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(text){
+
+    document.getElementById(
+        "loginMessage"
+    ).textContent=text;
+}
+
+
+/* =====================================================
+   HTML SAFETY
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+setupAdmin();
+
+if(getCurrentUser()){
+
+    startApp();
+
+}
+
+</script>
+
+</body>
+</html>
